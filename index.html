@@ -524,13 +524,147 @@
 
     /* RSVP */
     .rsvp { background: var(--cream); }
-    .rsvp__envelope { cursor: pointer; display: inline-block; margin: 2rem 0; transition: transform .3s; }
-    .rsvp__envelope:hover { transform: scale(1.07) rotate(-2deg); }
-    .rsvp__envelope svg { width: 90px; height: auto; }
-    .rsvp__form { display: none; max-width: 420px; margin: 0 auto; text-align: left; }
+    /* RSVP envelope illustration */
+    .rsvp__envelope {
+      cursor: pointer;
+      display: inline-block;
+      margin: 1.8rem 0 0.5rem;
+      position: relative;
+    }
+
+    .rsvp-env-scene {
+      position: relative;
+      width: 220px;
+      height: 155px;
+      margin: 0 auto;
+      perspective: 700px;
+    }
+
+    /* Sombra bajo el sobre */
+    .rsvp-env-scene::after {
+      content: '';
+      position: absolute;
+      bottom: -16px; left: 12%;
+      width: 76%; height: 16px;
+      background: radial-gradient(ellipse, rgba(60,40,20,0.28) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: renv-shadow 4s ease-in-out infinite;
+    }
+    @keyframes renv-shadow {
+      0%,100% { transform: scaleX(1);    opacity: 0.7; }
+      50%      { transform: scaleX(0.78); opacity: 0.35; }
+    }
+
+    .rsvp-env-body {
+      position: absolute;
+      inset: 0;
+      animation: renv-float 4s ease-in-out infinite;
+      transform-style: preserve-3d;
+    }
+    .rsvp__envelope:hover .rsvp-env-body {
+      animation: none;
+      transform: translateY(-16px) rotateX(5deg) rotateY(-4deg) scale(1.03);
+    }
+    @keyframes renv-float {
+      0%,100% { transform: translateY(0)     rotateX(0deg)   rotateZ(-0.4deg); }
+      50%      { transform: translateY(-13px) rotateX(2.5deg) rotateZ(0.6deg); }
+    }
+
+    .rsvp-env-body svg {
+      width: 100%; height: 100%;
+      transition: filter 0.4s ease;
+      filter: drop-shadow(0 10px 26px rgba(80,50,20,0.18)) drop-shadow(0 2px 4px rgba(0,0,0,0.09));
+    }
+    .rsvp__envelope:hover .rsvp-env-body svg {
+      filter: drop-shadow(0 20px 44px rgba(80,50,20,0.28)) drop-shadow(0 6px 12px rgba(0,0,0,0.13));
+    }
+
+    /* Solapa abriéndose */
+    .rsvp-flap-top {
+      transform-origin: top center;
+      transform-box: fill-box;
+      transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .rsvp__envelope:hover .rsvp-flap-top {
+      transform: rotateX(-165deg);
+    }
+
+    /* Carta asomando */
+    .rsvp-letter {
+      transform-origin: bottom center;
+      transform-box: fill-box;
+      transition: transform 0.75s cubic-bezier(0.34, 1.4, 0.64, 1) 0.22s,
+                  opacity  0.45s ease 0.18s;
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    .rsvp__envelope:hover .rsvp-letter {
+      opacity: 1;
+      transform: translateY(-46px);
+    }
+
+    /* Sello latiendo */
+    .rsvp-seal-g {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: renv-seal-beat 2.4s ease-in-out infinite;
+    }
+    @keyframes renv-seal-beat {
+      0%,100% { transform: scale(1);    }
+      42%      { transform: scale(1.09); }
+      52%      { transform: scale(1.04); }
+    }
+
+    /* Brillo girando en el sello */
+    .rsvp-seal-light {
+      animation: renv-seal-light 3.8s ease-in-out infinite;
+    }
+    @keyframes renv-seal-light {
+      0%,55%,100% { opacity: 0; transform: translate(-4px,-4px) scale(0.6); }
+      28%          { opacity: 0.65; transform: translate(3px,2px) scale(1.2); }
+    }
+
+    /* Detalles de líneas creciendo */
+    .renv-draw {
+      stroke-dasharray: 80;
+      stroke-dashoffset: 80;
+      animation: renv-draw 1.8s ease forwards;
+    }
+    .renv-draw-2 { animation-delay: 0.3s; }
+    @keyframes renv-draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Ornamentos esquinas */
+    .renv-orn {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: renv-orn-sway 5.5s ease-in-out infinite;
+    }
+    .renv-orn:nth-child(2) { animation-delay: 1.1s; }
+    .renv-orn:nth-child(3) { animation-delay: 2.2s; }
+    .renv-orn:nth-child(4) { animation-delay: 3.3s; }
+    @keyframes renv-orn-sway {
+      0%,100% { transform: rotate(0deg) scale(1); }
+      50%      { transform: rotate(10deg) scale(1.12); }
+    }
+
+    /* Hint */
+    .rsvp-hint {
+      display: block;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(184,147,90,0.55);
+      margin-top: 1rem;
+      animation: renv-hint 2.8s ease-in-out infinite;
+    }
+    @keyframes renv-hint { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+.rsvp__form { display: none; max-width: 420px; margin: 0 auto; text-align: left; }
     .rsvp__form.open { display: block; }
     .form-group { margin-bottom: 1.2rem; }
-    .form-group label { display: block; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+    .form-group label { display: block; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; font-weight: 700; }
     .form-group input, .form-group select { width: 100%; padding: 0.7rem 1rem; border: 1px solid #ddd; border-radius: 2px; background: #fff; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; outline: none; transition: border-color .2s; }
     .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
     .btn-submit { width: 100%; padding: 0.85rem; background: var(--gold); color: #fff; border: none; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: background .25s; margin-top: 0.5rem; }
@@ -577,10 +711,47 @@
     /* ACCOMMODATIONS */
     .accommodations { background: var(--cream); }
     .acc__grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2.5rem; }
-    .acc-card { background: #fff; padding: 1.8rem 2rem; border-radius: 4px; box-shadow: 0 2px 16px rgba(0,0,0,.06); min-width: 220px; transition: transform .3s; }
-    .acc-card:hover { transform: translateY(-3px); }
+    .acc-card { background: #fff; padding: 1.8rem 2rem; border-radius: 4px; box-shadow: 0 2px 16px rgba(0,0,0,.06); min-width: 220px; transition: transform .3s, box-shadow .3s; position: relative; }
+    .acc-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.10); }
+    .acc-card--recommended {
+      border-top: 3px solid var(--gold);
+      box-shadow: 0 4px 22px rgba(184,147,90,0.18);
+    }
+    .acc-card__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 0.28rem 0.75rem;
+      border-radius: 20px;
+      margin-bottom: 0.85rem;
+    }
     .acc-card__name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.4rem; }
     .acc-card__phone { font-size: 0.78rem; color: var(--mid); margin-bottom: 0.8rem; }
+    .acc-card__perks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .acc-card__perk {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #f5f8f0;
+      border: 1px solid #d0ddb8;
+      color: #5a6e30;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      padding: 0.22rem 0.65rem;
+      border-radius: 20px;
+      font-weight: 500;
+    }
 
     /* FOOTER */
     footer { background: var(--dark); color: rgba(255,255,255,.35); text-align: center; padding: 2rem; font-size: 0.7rem; letter-spacing: 0.1em; border-top: 1px solid rgba(255,255,255,.06); }
@@ -718,17 +889,17 @@
     }
 
     .env-card__eyebrow {
-      font-size: 0.6rem;
-      letter-spacing: 0.35em;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--gold);
       font-weight: 500;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.8rem;
     }
 
     .env-card__names {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-size: clamp(2rem, 7vw, 2.8rem);
       font-weight: 300;
       color: var(--dark);
       line-height: 1.2;
@@ -741,10 +912,10 @@
     }
 
     .env-card__date {
-      font-size: 0.65rem;
-      letter-spacing: 0.28em;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
       color: var(--mid);
-      margin-top: 0.6rem;
+      margin-top: 0.8rem;
       text-transform: uppercase;
     }
 
@@ -759,7 +930,7 @@
     .env-card__msg {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      font-size: clamp(1.05rem, 3.5vw, 1.25rem);
       color: var(--mid);
       line-height: 1.7;
     }
@@ -950,7 +1121,7 @@
       <p class="event-card__type">Ceremonia</p>
       <h3 class="event-card__name">Parroquia San Juan Bautista</h3>
       <p class="event-card__address">Neira, Caldas, Colombia</p>
-      <p class="event-card__time">14:30 h</p>
+      <p class="event-card__time">16:30 h</p>
       <a class="btn-map" href="https://maps.app.goo.gl/c54upf4M8zQTu5MH7" target="_blank" rel="noopener noreferrer">Ver en Maps</a>
     </div>
     <div class="event-card">
@@ -991,7 +1162,7 @@
 
     <!-- Ceremonia: paloma + argollas cálidas -->
     <div class="timeline__item">
-      <span class="timeline__time">14:30</span>
+      <span class="timeline__time">16:30</span>
       <div class="timeline__icon tl-icon-ceremony">💍</div>
       <div class="timeline__body"><p class="timeline__label">Ceremonia</p><p class="timeline__sub">Parroquia San Juan Bautista</p></div>
     </div>
@@ -1026,13 +1197,157 @@
   <div class="divider"><div class="divider__line"></div><div class="divider__diamond"></div><div class="divider__line"></div></div>
   <h2 class="section__title">¿Nos acompañas?</h2>
   <p class="section__text">Pulsa el sobre para confirmar tu asistencia</p>
-  <div class="rsvp__envelope" onclick="toggleRSVP()" aria-label="Abrir formulario">
-    <svg viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1" y="1" width="98" height="68" rx="4" fill="#fff" stroke="#b8935a" stroke-width="1.5"/>
-      <polyline points="1,1 50,42 99,1" fill="none" stroke="#b8935a" stroke-width="1.5"/>
-      <line x1="1" y1="69" x2="36" y2="36" stroke="#b8935a" stroke-width="1.5"/>
-      <line x1="99" y1="69" x2="64" y2="36" stroke="#b8935a" stroke-width="1.5"/>
-    </svg>
+  <div class="rsvp__envelope" onclick="toggleRSVP()" aria-label="Confirmar asistencia">
+    <div class="rsvp-env-scene">
+      <div class="rsvp-env-body">
+        <svg viewBox="0 0 220 155" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Cuerpo del sobre -->
+            <linearGradient id="envB" x1="0" y1="0" x2="0.2" y2="1">
+              <stop offset="0%"   stop-color="#fffef9"/>
+              <stop offset="100%" stop-color="#f4e8cc"/>
+            </linearGradient>
+            <!-- Solapa -->
+            <linearGradient id="envF" x1="0" y1="0" x2="0.4" y2="1">
+              <stop offset="0%"   stop-color="#f5e8c8"/>
+              <stop offset="60%"  stop-color="#e8d4a0"/>
+              <stop offset="100%" stop-color="#dcc888"/>
+            </linearGradient>
+            <!-- Pliegues laterales -->
+            <linearGradient id="envSide" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%"   stop-color="#ecdbb8"/>
+              <stop offset="50%"  stop-color="#f5e8cc"/>
+              <stop offset="100%" stop-color="#ecdbb8"/>
+            </linearGradient>
+            <!-- Sello borgoña -->
+            <radialGradient id="sealBg" cx="40%" cy="35%">
+              <stop offset="0%"   stop-color="#9e4a5e"/>
+              <stop offset="55%"  stop-color="#7a2e42"/>
+              <stop offset="100%" stop-color="#5c1e30"/>
+            </radialGradient>
+            <!-- Carta interior -->
+            <linearGradient id="letterBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#fffef9"/>
+              <stop offset="100%" stop-color="#f8f0e0"/>
+            </linearGradient>
+            <filter id="envSh">
+              <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="rgba(60,30,10,0.14)"/>
+            </filter>
+          </defs>
+
+          <!-- ── CARTA INTERIOR (aparece al hover) ── -->
+          <g class="rsvp-letter">
+            <rect x="50" y="16" width="120" height="100" rx="3" fill="url(#letterBg)" stroke="#d4b483" stroke-width="0.9"/>
+            <!-- Marco interior de la carta -->
+            <rect x="56" y="22" width="108" height="88" rx="2" fill="none" stroke="#d4b483" stroke-width="0.5" stroke-dasharray="3 2.5" opacity="0.55"/>
+            <!-- Monograma -->
+            <text x="110" y="64" text-anchor="middle"
+                  font-family="Cormorant Garamond, serif"
+                  font-style="italic" font-size="22"
+                  fill="#b8935a" opacity="0.95">A &amp; M</text>
+            <!-- Separador fino -->
+            <line x1="75" y1="72" x2="145" y2="72" stroke="#d4b483" stroke-width="0.8" opacity="0.7"/>
+            <!-- Fecha -->
+            <text x="110" y="86" text-anchor="middle"
+                  font-family="Montserrat, sans-serif"
+                  font-size="7" letter-spacing="2.5"
+                  fill="#b8935a" opacity="0.7">28 · 06 · 2026</text>
+            <!-- Florón pequeño centrado -->
+            <text x="110" y="104" text-anchor="middle" font-size="9">✿</text>
+          </g>
+
+          <!-- ── CUERPO BASE ── -->
+          <rect x="1" y="1" width="218" height="153" rx="7" fill="url(#envB)" filter="url(#envSh)"/>
+
+          <!-- Borde dorado exterior -->
+          <rect x="1" y="1" width="218" height="153" rx="7" fill="none"
+                stroke="#c9aa72" stroke-width="1.8"/>
+
+          <!-- Marco interior punteado dorado -->
+          <rect x="8" y="8" width="204" height="139" rx="5" fill="none"
+                stroke="#d4b483" stroke-width="0.7"
+                stroke-dasharray="5 3.5" opacity="0.4"/>
+
+          <!-- Segunda línea decorativa interior más pequeña -->
+          <rect x="14" y="14" width="192" height="127" rx="3" fill="none"
+                stroke="#d4b483" stroke-width="0.4"
+                stroke-dasharray="2 4" opacity="0.25"/>
+
+          <!-- ── PLIEGUES LATERALES INFERIORES ── -->
+          <path d="M1 154 L78 90 L110 110 L142 90 L219 154"
+                fill="url(#envSide)" stroke="#c9aa72"
+                stroke-width="1.3" stroke-linejoin="round"/>
+
+          <!-- Líneas decorativas laterales animadas -->
+          <line class="renv-draw"   x1="18" y1="118" x2="68" y2="118" stroke="#d4b483" stroke-width="0.7" opacity="0.45"/>
+          <line class="renv-draw renv-draw-2" x1="152" y1="118" x2="202" y2="118" stroke="#d4b483" stroke-width="0.7" opacity="0.45"/>
+
+          <!-- ── ORNAMENTOS ESQUINAS ── -->
+          <!-- Superior izq -->
+          <g class="renv-orn">
+            <circle cx="22" cy="22" r="8" fill="#d4b483" opacity="0.12"/>
+            <text x="22" y="26.5" text-anchor="middle" font-size="13">🌸</text>
+          </g>
+          <!-- Superior der -->
+          <g class="renv-orn">
+            <circle cx="198" cy="22" r="8" fill="#d4b483" opacity="0.12"/>
+            <text x="198" y="26.5" text-anchor="middle" font-size="13">🌸</text>
+          </g>
+          <!-- Inferior izq -->
+          <g class="renv-orn">
+            <text x="22" y="140" text-anchor="middle" font-size="11">🍃</text>
+          </g>
+          <!-- Inferior der -->
+          <g class="renv-orn">
+            <text x="198" y="140" text-anchor="middle" font-size="11">🍃</text>
+          </g>
+
+          <!-- ── SOLAPA SUPERIOR ── -->
+          <g class="rsvp-flap-top">
+            <!-- Cara exterior de la solapa -->
+            <path d="M1 1 L110 92 L219 1 Z"
+                  fill="url(#envF)" stroke="#c9aa72"
+                  stroke-width="1.6" stroke-linejoin="round"/>
+            <!-- Costuras diagonales en la solapa -->
+            <line x1="1" y1="1" x2="110" y2="92" stroke="#c9aa72" stroke-width="0.45" opacity="0.35"/>
+            <line x1="219" y1="1" x2="110" y2="92" stroke="#c9aa72" stroke-width="0.45" opacity="0.35"/>
+            <!-- Detalle paralelo al borde izq de la solapa -->
+            <line x1="8" y1="1" x2="110" y2="87" stroke="#d4b483" stroke-width="0.35" opacity="0.25"/>
+            <line x1="211" y1="1" x2="110" y2="87" stroke="#d4b483" stroke-width="0.35" opacity="0.25"/>
+          </g>
+
+          <!-- ── SELLO DE LACRE BORGOÑA ── -->
+          <g class="rsvp-seal-g">
+            <!-- Halo difuso -->
+            <circle cx="110" cy="82" r="22" fill="rgba(126,46,66,0.12)"/>
+            <!-- Cuerpo del sello -->
+            <circle cx="110" cy="82" r="17" fill="url(#sealBg)"/>
+            <!-- Anillo interior -->
+            <circle cx="110" cy="82" r="15" fill="none"
+                    stroke="rgba(255,220,180,0.22)" stroke-width="1.2"/>
+            <!-- Pequeños puntos decorativos en el anillo -->
+            <circle cx="110" cy="67" r="1.2" fill="rgba(255,220,180,0.4)"/>
+            <circle cx="110" cy="97" r="1.2" fill="rgba(255,220,180,0.4)"/>
+            <circle cx="95"  cy="82" r="1.2" fill="rgba(255,220,180,0.4)"/>
+            <circle cx="125" cy="82" r="1.2" fill="rgba(255,220,180,0.4)"/>
+            <!-- Rosa central en el sello -->
+            <!-- Pétalos exteriores -->
+            <ellipse cx="110" cy="74" rx="3.5" ry="5" fill="rgba(255,210,210,0.85)" transform="rotate(0 110 82)"/>
+            <ellipse cx="110" cy="74" rx="3.5" ry="5" fill="rgba(255,200,200,0.8)"  transform="rotate(45 110 82)"/>
+            <ellipse cx="110" cy="74" rx="3.5" ry="5" fill="rgba(255,210,210,0.85)" transform="rotate(90 110 82)"/>
+            <ellipse cx="110" cy="74" rx="3.5" ry="5" fill="rgba(255,200,200,0.8)"  transform="rotate(135 110 82)"/>
+            <!-- Centro de la rosa -->
+            <circle cx="110" cy="82" r="4.5" fill="rgba(255,230,220,0.9)"/>
+            <circle cx="110" cy="82" r="2.5" fill="rgba(255,210,200,1)"/>
+            <!-- Brillo animado del sello -->
+            <ellipse class="rsvp-seal-light" cx="105" cy="77" rx="4" ry="2.5"
+                     fill="#fff" opacity="0.45"/>
+          </g>
+
+        </svg>
+      </div>
+    </div>
+    <span class="rsvp-hint">Toca para confirmar asistencia</span>
   </div>
   <form class="rsvp__form" id="rsvpForm" onsubmit="submitRSVP(event)">
     <div class="form-group">
@@ -1073,14 +1388,21 @@
   <h2 class="section__title">¿Dónde alojarse?</h2>
   <p class="section__text">Si quieres hacer noche por la zona, te dejamos algunas opciones.</p>
   <div class="acc__grid">
-    <div class="acc-card">
+    <div class="acc-card acc-card--recommended">
+      <div class="acc-card__badge">⭐ Recomendado</div>
       <p class="acc-card__name">Alojamiento 1</p>
       <p class="acc-card__phone">Neira, Caldas</p>
+      <div class="acc-card__perks">
+        <span class="acc-card__perk">🚗 Parqueadero incluido</span>
+      </div>
       <a class="btn-map" href="https://maps.app.goo.gl/yNy9DauxjKqTzUpKA" target="_blank" rel="noopener noreferrer">Ver en Maps</a>
     </div>
     <div class="acc-card">
       <p class="acc-card__name">Alojamiento 2</p>
       <p class="acc-card__phone">Neira, Caldas</p>
+      <div class="acc-card__perks">
+        <span class="acc-card__perk">🌳 Vista al parque</span>
+      </div>
       <a class="btn-map" href="https://maps.app.goo.gl/LuJZU6JgGWuAUJvB8" target="_blank" rel="noopener noreferrer">Ver en Maps</a>
     </div>
   </div>
