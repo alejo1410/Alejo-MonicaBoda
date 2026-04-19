@@ -711,7 +711,7 @@
     /* ACCOMMODATIONS */
     .accommodations { background: var(--cream); }
     .acc__grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2.5rem; }
-    .acc-card { background: #fff; padding: 1.8rem 2rem; border-radius: 4px; box-shadow: 0 2px 16px rgba(0,0,0,.06); min-width: 220px; transition: transform .3s, box-shadow .3s; position: relative; }
+    .acc-card { background: #fff; padding: 1.8rem 2rem; border-radius: 4px; box-shadow: 0 2px 16px rgba(0,0,0,.06); min-width: 220px; transition: transform .3s, box-shadow .3s; position: relative; text-align: center; }
     .acc-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,.10); }
     .acc-card--recommended {
       border-top: 3px solid var(--gold);
@@ -749,6 +749,7 @@
     .acc-card__perks {
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 0.4rem;
       margin-bottom: 1rem;
     }
