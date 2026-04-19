@@ -1514,13 +1514,13 @@
     </div>
     <div class="form-group">
       <label for="asistencia">Asistencia</label>
-      <select id="asistencia" name="asistencia" required>
+      <select id="asistencia" name="asistencia" required onchange="toggleAcompanantes(this.value)">
         <option value="">Selecciona…</option>
         <option value="si">Sí, asistiré 🎉</option>
         <option value="no">No podré asistir 😢</option>
       </select>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="numAcompGroup" style="opacity:0.4;pointer-events:none;transition:opacity 0.3s ease;">
       <label for="numAcompanantes">Número de acompañantes</label>
       <select id="numAcompanantes" name="numAcompanantes" onchange="updateCompanions(this.value)">
         <option value="0">Sin acompañantes</option>
@@ -1531,7 +1531,7 @@
         <option value="5">5 acompañantes</option>
       </select>
     </div>
-    <div class="form-group" id="companionsGroup" style="display:none;">
+    <div class="form-group" id="companionsGroup" style="display:none;opacity:0.4;pointer-events:none;">
       <label>Nombres de los acompañantes</label>
       <div id="companionsList"></div>
     </div>
@@ -1654,6 +1654,25 @@
   });
 
   /* RSVP - global functions */
+  function toggleAcompanantes(val) {
+    var group = document.getElementById('numAcompGroup');
+    var compGroup = document.getElementById('companionsGroup');
+    var numSelect = document.getElementById('numAcompanantes');
+    if (val === 'si') {
+      group.style.opacity = '1';
+      group.style.pointerEvents = 'auto';
+    } else {
+      group.style.opacity = '0.4';
+      group.style.pointerEvents = 'none';
+      // Reset companions if deselected
+      numSelect.value = '0';
+      compGroup.style.display = 'none';
+      compGroup.style.opacity = '0.4';
+      compGroup.style.pointerEvents = 'none';
+      document.getElementById('companionsList').innerHTML = '';
+    }
+  }
+
   function toggleRSVP() { document.getElementById('rsvpForm').classList.toggle('open'); }
 
   function updateCompanions(num) {
@@ -1663,6 +1682,8 @@
     list.innerHTML = '';
     if (n > 0) {
       group.style.display = 'block';
+      group.style.opacity = '1';
+      group.style.pointerEvents = 'auto';
       for (var i = 1; i <= n; i++) {
         var row = document.createElement('div');
         row.className = 'companion-row';
