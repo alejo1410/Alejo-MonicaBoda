@@ -1221,7 +1221,7 @@
     🎵
   </button>
 </div>
-<audio id="weddingAudio" loop preload="none">
+<audio id="weddingAudio" loop preload="auto">
   <source src="https://raw.githubusercontent.com/alejo1410/Alejo-MonicaBoda/main/Perfect.mp3" type="audio/mpeg">
 </audio>
 <!-- ===================== FIN MUSIC PLAYER ===================== -->
@@ -1784,41 +1784,89 @@
   var audioPlaying = false;
   var audioEl = null;
 
+  function startAudio() {
+    if (!audioEl) audioEl = document.getElementById('weddingAudio');
+    var btn  = document.getElementById('musicBtn');
+    var info = document.getElementById('musicInfo');
+    audioEl.volume = 0;
+    audioEl.play().then(function() {
+      audioPlaying = true;
+      btn.textContent = '🎶';
+      btn.classList.add('playing');
+      info.classList.add('visible', 'playing');
+      // Fade in suave
+      var vol = 0;
+      var fade = setInterval(function() {
+        vol = Math.min(vol + 0.04, 0.75);
+        audioEl.volume = vol;
+        if (vol >= 0.75) clearInterval(fade);
+      }, 120);
+      // Ocultar info después de 4s
+      setTimeout(function() {
+        if (!btn.matches(':hover')) info.classList.remove('visible');
+      }, 4000);
+    }).catch(function() {
+      // Autoplay bloqueado - esperar interacción del usuario
+      document.addEventListener('click', function onFirstClick() {
+        startAudio();
+        document.removeEventListener('click', onFirstClick);
+      }, { once: true });
+      document.addEventListener('touchstart', function onFirstTouch() {
+        startAudio();
+        document.removeEventListener('touchstart', onFirstTouch);
+      }, { once: true });
+    });
+  }
+
   function toggleMusic() {
     if (!audioEl) audioEl = document.getElementById('weddingAudio');
     var btn  = document.getElementById('musicBtn');
     var info = document.getElementById('musicInfo');
 
     if (audioPlaying) {
-      audioEl.pause();
-      audioPlaying = false;
-      btn.textContent = '🎵';
-      btn.classList.remove('playing');
-      info.classList.remove('visible', 'playing');
+      // Fade out y pausar
+      var vol = audioEl.volume;
+      var fade = setInterval(function() {
+        vol = Math.max(vol - 0.06, 0);
+        audioEl.volume = vol;
+        if (vol <= 0) {
+          clearInterval(fade);
+          audioEl.pause();
+          audioPlaying = false;
+          btn.textContent = '🎵';
+          btn.classList.remove('playing');
+          info.classList.remove('visible', 'playing');
+        }
+      }, 80);
     } else {
+      audioEl.volume = 0;
       audioEl.play().then(function() {
         audioPlaying = true;
         btn.textContent = '🎶';
         btn.classList.add('playing');
         info.classList.add('visible', 'playing');
-      }).catch(function(e) {
-        console.log('Audio error:', e);
+        var vol = 0;
+        var fade = setInterval(function() {
+          vol = Math.min(vol + 0.04, 0.75);
+          audioEl.volume = vol;
+          if (vol >= 0.75) clearInterval(fade);
+        }, 120);
       });
     }
   }
 
-  // Mostrar info de la canción al pasar el cursor
+  // Hover info
   document.addEventListener('DOMContentLoaded', function() {
-    var btn = document.getElementById('musicBtn');
+    var btn  = document.getElementById('musicBtn');
     var info = document.getElementById('musicInfo');
     if (btn && info) {
-      btn.addEventListener('mouseenter', function() {
-        info.classList.add('visible');
-      });
+      btn.addEventListener('mouseenter', function() { info.classList.add('visible'); });
       btn.addEventListener('mouseleave', function() {
         if (!audioPlaying) info.classList.remove('visible');
       });
     }
+    // Intentar autoplay al cargar
+    startAudio();
   });
   /* ===================== FIN MUSIC PLAYER JS ===================== */
 
