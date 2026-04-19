@@ -731,6 +731,19 @@
       border-radius: 20px;
       margin-bottom: 0.85rem;
     }
+    .acc-card__badge--eco {
+      background: linear-gradient(135deg, #4a6128, #6b7c45);
+      box-shadow: 0 2px 10px rgba(74,97,40,0.3);
+    }
+    .acc-card__badge--eco .eco-leaf {
+      display: inline-block;
+      animation: eco-leaf-sway 2.5s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    @keyframes eco-leaf-sway {
+      0%, 100% { transform: rotate(-10deg); }
+      50%       { transform: rotate(10deg); }
+    }
     .acc-card__name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.4rem; }
     .acc-card__phone { font-size: 0.78rem; color: var(--mid); margin-bottom: 0.8rem; }
     .acc-card__perks {
@@ -752,6 +765,23 @@
       border-radius: 20px;
       font-weight: 500;
     }
+    .acc-card__perk .perk-icon {
+      display: inline-block;
+      animation: perk-sway 3s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    .acc-card__perk .perk-icon--bounce {
+      animation: perk-bounce 2s ease-in-out infinite;
+    }
+    @keyframes perk-sway {
+      0%, 100% { transform: rotate(-8deg) scale(1); }
+      50%       { transform: rotate(8deg) scale(1.15); }
+    }
+    @keyframes perk-bounce {
+      0%, 100% { transform: translateY(0); }
+      40%       { transform: translateY(-4px); }
+      60%       { transform: translateY(-2px); }
+    }
 
     /* FOOTER */
     footer { background: var(--dark); color: rgba(255,255,255,.35); text-align: center; padding: 2rem; font-size: 0.7rem; letter-spacing: 0.1em; border-top: 1px solid rgba(255,255,255,.06); }
@@ -763,6 +793,112 @@
       .couple-photos__grid { grid-template-columns: 1fr 1fr; max-width: 100%; gap: 0; }
       .couple-photos__img { aspect-ratio: 3/4; }
     }
+
+    /* ===================== MUSIC PLAYER ===================== */
+    #music-player {
+      position: fixed;
+      bottom: 1.4rem;
+      right: 1.4rem;
+      z-index: 8888;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .music-btn {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: rgba(26, 18, 8, 0.82);
+      border: 1.5px solid var(--gold-light);
+      color: var(--gold-light);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s;
+      flex-shrink: 0;
+    }
+    .music-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+      background: rgba(40, 28, 10, 0.92);
+    }
+
+    .music-info {
+      background: rgba(26, 18, 8, 0.82);
+      border: 1.5px solid var(--gold-light);
+      border-radius: 24px;
+      padding: 0.4rem 1rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+      overflow: hidden;
+      max-width: 0;
+      opacity: 0;
+      transition: max-width 0.5s ease, opacity 0.4s ease, padding 0.4s ease;
+      white-space: nowrap;
+    }
+    .music-info.visible {
+      max-width: 200px;
+      opacity: 1;
+    }
+
+    .music-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--gold-light);
+      letter-spacing: 0.05em;
+    }
+    .music-artist {
+      font-size: 0.6rem;
+      color: rgba(212,180,131,0.6);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    /* Vinilo girando cuando suena */
+    .music-btn.playing {
+      animation: vinyl-spin 3s linear infinite;
+    }
+    @keyframes vinyl-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .music-btn.playing:hover {
+      animation-play-state: paused;
+    }
+
+    /* Ondas de sonido */
+    .music-waves {
+      display: none;
+      align-items: flex-end;
+      gap: 2px;
+      height: 14px;
+      margin-top: 3px;
+    }
+    .music-info.playing .music-waves { display: flex; }
+    .music-wave {
+      width: 3px;
+      border-radius: 2px;
+      background: var(--gold);
+      animation: wave-dance 0.8s ease-in-out infinite;
+    }
+    .music-wave:nth-child(1) { height: 6px;  animation-delay: 0s; }
+    .music-wave:nth-child(2) { height: 12px; animation-delay: 0.15s; }
+    .music-wave:nth-child(3) { height: 8px;  animation-delay: 0.3s; }
+    .music-wave:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+    .music-wave:nth-child(5) { height: 6px;  animation-delay: 0.25s; }
+    @keyframes wave-dance {
+      0%, 100% { transform: scaleY(0.4); opacity: 0.6; }
+      50%       { transform: scaleY(1);   opacity: 1; }
+    }
+    /* ===================== FIN MUSIC PLAYER ===================== */
 
     /* ===================== ENVELOPE INTRO ===================== */
     #envelope-screen {
@@ -1067,6 +1203,28 @@
   </div>
 </div>
 <!-- ===================== FIN SOBRE INTRO ===================== -->
+
+<!-- ===================== MUSIC PLAYER ===================== -->
+<div id="music-player">
+  <div class="music-info" id="musicInfo">
+    <span class="music-title">Perfect</span>
+    <span class="music-artist">Ed Sheeran</span>
+    <div class="music-waves">
+      <div class="music-wave"></div>
+      <div class="music-wave"></div>
+      <div class="music-wave"></div>
+      <div class="music-wave"></div>
+      <div class="music-wave"></div>
+    </div>
+  </div>
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()" aria-label="Reproducir música">
+    🎵
+  </button>
+</div>
+<audio id="weddingAudio" loop preload="none">
+  <source src="https://raw.githubusercontent.com/alejo1410/Alejo-MonicaBoda/main/Perfect.mp3" type="audio/mpeg">
+</audio>
+<!-- ===================== FIN MUSIC PLAYER ===================== -->
 
 <!-- HERO -->
 <section class="hero" id="top">
@@ -1390,7 +1548,7 @@
   <div class="acc__grid">
     <div class="acc-card acc-card--recommended">
       <div class="acc-card__badge">⭐ Recomendado</div>
-      <p class="acc-card__name">Alojamiento 1</p>
+      <p class="acc-card__name">Hotel Colinas Del Norte</p>
       <p class="acc-card__phone">Neira, Caldas</p>
       <div class="acc-card__perks">
         <span class="acc-card__perk">🚗 Parqueadero incluido</span>
@@ -1398,12 +1556,24 @@
       <a class="btn-map" href="https://maps.app.goo.gl/yNy9DauxjKqTzUpKA" target="_blank" rel="noopener noreferrer">Ver en Maps</a>
     </div>
     <div class="acc-card">
-      <p class="acc-card__name">Alojamiento 2</p>
+      <div class="acc-card__badge acc-card__badge--eco"><span class="eco-leaf">🌿</span> Ecohotel</div>
+      <p class="acc-card__name">La Camelia ECOHOTEL</p>
       <p class="acc-card__phone">Neira, Caldas</p>
       <div class="acc-card__perks">
-        <span class="acc-card__perk">🌳 Vista al parque</span>
+        <span class="acc-card__perk"><span class="perk-icon">🌿</span> Vista a la naturaleza</span>
+        <span class="acc-card__perk"><span class="perk-icon perk-icon--bounce">📍</span> A 10 min del pueblo</span>
       </div>
-      <a class="btn-map" href="https://maps.app.goo.gl/LuJZU6JgGWuAUJvB8" target="_blank" rel="noopener noreferrer">Ver en Maps</a>
+      <a class="btn-map" href="https://maps.app.goo.gl/REugaBBgPu6TLeuL8" target="_blank" rel="noopener noreferrer">Ver en Maps</a>
+    </div>
+    <div class="acc-card">
+      <div class="acc-card__badge acc-card__badge--eco"><span class="eco-leaf">🌿</span> Ecohotel</div>
+      <p class="acc-card__name">Tominejo Ecolodge</p>
+      <p class="acc-card__phone">Neira, Caldas</p>
+      <div class="acc-card__perks">
+        <span class="acc-card__perk"><span class="perk-icon">🌿</span> Vista a la naturaleza</span>
+        <span class="acc-card__perk"><span class="perk-icon perk-icon--bounce">📍</span> A 15 min del pueblo</span>
+      </div>
+      <a class="btn-map" href="https://maps.app.goo.gl/RsJ1b1kTjridKF4w5" target="_blank" rel="noopener noreferrer">Ver en Maps</a>
     </div>
   </div>
 </section>
@@ -1609,6 +1779,48 @@
     return response;
   }
   /* ===================== FIN SUPABASE CONFIG ===================== */
+
+  /* ===================== MUSIC PLAYER JS ===================== */
+  var audioPlaying = false;
+  var audioEl = null;
+
+  function toggleMusic() {
+    if (!audioEl) audioEl = document.getElementById('weddingAudio');
+    var btn  = document.getElementById('musicBtn');
+    var info = document.getElementById('musicInfo');
+
+    if (audioPlaying) {
+      audioEl.pause();
+      audioPlaying = false;
+      btn.textContent = '🎵';
+      btn.classList.remove('playing');
+      info.classList.remove('visible', 'playing');
+    } else {
+      audioEl.play().then(function() {
+        audioPlaying = true;
+        btn.textContent = '🎶';
+        btn.classList.add('playing');
+        info.classList.add('visible', 'playing');
+      }).catch(function(e) {
+        console.log('Audio error:', e);
+      });
+    }
+  }
+
+  // Mostrar info de la canción al pasar el cursor
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('musicBtn');
+    var info = document.getElementById('musicInfo');
+    if (btn && info) {
+      btn.addEventListener('mouseenter', function() {
+        info.classList.add('visible');
+      });
+      btn.addEventListener('mouseleave', function() {
+        if (!audioPlaying) info.classList.remove('visible');
+      });
+    }
+  });
+  /* ===================== FIN MUSIC PLAYER JS ===================== */
 
   /* ===================== SOBRE INTRO JS ===================== */
   var envelopeOpened = false;
